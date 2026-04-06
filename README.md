@@ -46,32 +46,50 @@ mv vgsales.csv /path/to/COSC301PROJECT/
 ## Running the Pipeline
 
 ### Requirements
+
+Install all dependencies with:
+
 ```bash
-pip install pandas
+pip install pandas scikit-learn matplotlib seaborn
 ```
 
-> No other dependencies required. `sqlite3` is part of the Python standard library.
 
 ### Steps
+
 1. Clone this repository
-2. Place `vgsales.csv` in the repo root (see download steps above)
-3. Open `vgsales_pipeline.ipynb` in Jupyter
-4. Run all cells top to bottom (**Kernel → Restart & Run All**)
+   ```bash
+   git clone <repo-url>
+   cd COSC301Project
+   ```
+
+2. Place `vgsales.csv` in the repo root (see dataset download steps above)
+
+3. Install dependencies
+   ```bash
+   pip install pandas scikit-learn matplotlib seaborn
+   ```
+
+4. Open `run_pipeline.ipynb` in VS Code or Jupyter and run all cells. Figures render inline.
 
 ### Outputs generated
-| File | Description |
-|------|-------------|
+
+| File / Folder | Description |
+|---|---|
 | `vgsales.csv` | Original raw data — never modified |
 | `vgsales_cleaned.csv` | Cleaned dataset (missing values handled, duplicates removed, types fixed) |
 | `vgsales.db` | SQLite database with two tables: `games` and `data_dictionary` |
+| `model_predictions.csv` | Actual vs predicted Global Sales for the test set (3,266 rows) |
 
 ---
 
 ## Pipeline Overview
 
-| Step | Description |
-|------|-------------|
+| Stage | Description |
+|---|---|
 | 1. Load | Read raw CSV, inspect shape and dtypes |
-| 2. ETL | Handle missing values, fix types, remove duplicates, normalise strings, flag outliers |
-| 3. Storage | Save cleaned CSV + load into SQLite DB |
-| 4. Queries | Demonstrate queryability with SQL via pandas |
+| 2. Clean / ETL | Handle missing values, fix types, remove duplicates, normalise strings, flag outliers |
+| 3. Storage | Save cleaned CSV + load into SQLite DB with data dictionary |
+| 4. EDA | Generate six exploratory figures rendered inline in the notebook |
+| 5. Baseline Model | Linear Regression using regional sales (note: near-perfect R² due to data leakage) |
+| 6. Improved Model | Tuned Random Forest using platform, genre, publisher, and year (no leakage) |
+| 7. Export | Save model predictions with metadata to `model_predictions.csv` |
